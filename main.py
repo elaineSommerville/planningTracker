@@ -50,4 +50,11 @@ def update_application(app_id: int, updated_app: Application):
 			return updated_app
 	return {"error": "Application not found"}
 		
-			
+# create a DELETE endpoint
+@app.delete("/applications/{app_id}")
+def delete_application(app_id: int):
+	for index, app in enumerate(applications):
+		if app.id == app_id:
+			deleted_app = applications.pop(index)
+			return {"message": "Application deleted", "data": deleted_app}
+	return {"error": "Application not found"} 			
