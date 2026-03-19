@@ -40,3 +40,14 @@ def get_application(app_id:int):
 		if app.id == app_id:
 			return app
 	return {"error": "Application not found"}
+
+# create a PUT endpoint 
+@app.put("/applications/{app_id}")
+def update_application(app_id: int, updated_app: Application):
+	for index, app in enumerate(applications):
+		if app.id == app_id: 
+			applications[index] = updated_app
+			return updated_app
+	return {"error": "Application not found"}
+		
+			
