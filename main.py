@@ -25,3 +25,18 @@ class Application(BaseModel):
 def create_application(application: Application):
 	applications.append(application)
 	return application
+
+# create a GET endpoint
+# this retrieves all of the applications currently in the applications array
+@app.get("/applications")
+def get_applications():
+	return applications
+
+# create a GET endpoint
+# this retrieves one application via its id parameter
+@app.get("/applications/{app_id}")
+def get_application(app_id:int):
+	for app in applications:
+		if app.id == app_id:
+			return app
+	return {"error": "Application not found"}
