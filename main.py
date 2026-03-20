@@ -57,4 +57,14 @@ def delete_application(app_id: int):
 		if app.id == app_id:
 			deleted_app = applications.pop(index)
 			return {"message": "Application deleted", "data": deleted_app}
-	return {"error": "Application not found"} 			
+	return {"error": "Application not found"}
+
+# create a GET endpoint
+# get all the applications with a 'status' parameter of 'pending'
+@app.get("/applications/{app_status}")
+def get_application_status(app_status: str):
+	for index, app in enumerate(applications):
+		if app.status == app_status:
+			status_app = applications.pop(index)
+			return {"message": "Pending applications", "data": status_app}
+		return {"error": "Pending applications not found"}  			
