@@ -51,8 +51,26 @@ class ApplicationFilter(BaseModel):
 def get_applications(filters: ApplicationFilter = Depends()):
 	return filter_applications(filters)
  
+# building the filtering logic
+def filter_applications(filters: ApplicationFilter):
+	query = "SELECT * FROM applications WHERE 1=1"
+	params = {}
 
+	if filters.status:
+		query += "AND status = :status"
+		params["submission_date_from"] = filters.submission_date_from
 
+	if filters.submission_date_to:
+		query += "AND submission_date <= :submission_date_to"
+		params["submission_date"] = filters.submission_date_to
+
+	if filters.address:
+		query += "AND address ILIKE :address"
+		params["address"] = f"%{filters.address}%"
+	
+	return execute_query(query, params)
+
+# ___start or original CRUD enpoints___
 # create a POST endpoint
 # this adds an application of type/model(BaseModel) 'Application' to applications array
 @app.post("/applications")
