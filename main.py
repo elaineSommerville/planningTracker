@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from datetime import date
+from datetime import date, datetime
+from typing import Optional
+from enum import Enum
+from fastapi import Depends
 
 app = FastAPI() #this is what was missing, i didnt define 'app'
 
@@ -12,12 +15,43 @@ applications = []
 def read_root():
 	return {"message": "Planning Tracker API running"}
 
+# create status class/type
+class Status(str, Enum):
+	pending = "pending"
+	approved = "approved"
+	rejected = "rejected"
+
+# this is the base class which each application is constructed from
 class Application(BaseModel):
 	id: int
+	reference_number: str
 	address: str
 	description: str
-	status: str
-	submission_date: date
+	application_type: Optional[str] = None
+	status: Status
+	submission_date: date	
+	decision_date: Optional[date] = None
+	created_at: date_time
+	updated_at: Optional[datetime] = None
+
+# this is the filtering model
+# this is a dedicated filter schema instead of stuffing everything into a route
+class ApplicationFilter(BaseModel):
+	status: Optional[Status] = None
+	submission_date_from: Optional[date] = None
+	submission_date_to: Optional[date] = None
+	decision_date_from: Optional[date] = None
+	decision_date_to: Optional[date] = None
+	address: Optional[str] = None
+	application_type: Optional[str] = None
+
+# Get Applications
+# interviewers like to see this pattern
+@app.get("/applications")
+def get_applications(filters: ApplicationFilter = Depends()):
+	return filter_applications(filters)
+ 
+
 
 # create a POST endpoint
 # this adds an application of type/model(BaseModel) 'Application' to applications array
