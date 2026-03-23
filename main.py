@@ -44,6 +44,8 @@ class ApplicationFilter(BaseModel):
 	decision_date_to: Optional[date] = None
 	address: Optional[str] = None
 	application_type: Optional[str] = None
+	limit: Optional[int] = 10 #this adds pagination
+	offset: Optional[int] = 0 #this adds paginiation
 
 # Get Applications
 # interviewers like to see this pattern
@@ -67,6 +69,10 @@ def filter_applications(filters: ApplicationFilter):
 	if filters.address:
 		query += "AND address ILIKE :address"
 		params["address"] = f"%{filters.address}%"
+
+	query += " LIMIT :limit OFFSET :offset"
+	params["limit"] = filters.limit
+	params["offset"] = filters.offset
 	
 	return execute_query(query, params)
 
