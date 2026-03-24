@@ -46,6 +46,8 @@ class ApplicationFilter(BaseModel):
 	application_type: Optional[str] = None
 	limit: Optional[int] = 10 #this adds pagination
 	offset: Optional[int] = 0 #this adds paginiation
+	sort_by: Optional[str] = "submission_date" #this adds sorting
+	order: Optional[str] = "desc" #this orders the sort
 
 # Get Applications
 # interviewers like to see this pattern
@@ -74,6 +76,8 @@ def filter_applications(filters: ApplicationFilter):
 	params["limit"] = filters.limit
 	params["offset"] = filters.offset
 	
+	query += f" ORDER BY {filters.sort_by} {filters.order}"
+
 	return execute_query(query, params)
 
 # ___start or original CRUD enpoints___
