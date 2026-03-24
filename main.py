@@ -33,6 +33,9 @@ class Application(BaseModel):
 	decision_date: Optional[date] = None
 	created_at: date_time
 	updated_at: Optional[datetime] = None
+	limit: Optional[int] = 10
+	offset: Optional[int] = 0
+
 
 # this is the filtering model
 # this is a dedicated filter schema instead of stuffing everything into a route
