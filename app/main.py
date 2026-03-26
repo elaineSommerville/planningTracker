@@ -4,8 +4,10 @@ from datetime import date, datetime
 from typing import Optional
 from enum import Enum
 from fastapi import Depends
+from routes import applications
 
 app = FastAPI() #this is what was missing, i didnt define 'app'
+app.include_router(applications.router)
 
 # initialize an empty applications array
 applications = [] 
