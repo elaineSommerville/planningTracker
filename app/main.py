@@ -4,7 +4,7 @@ from datetime import date, datetime
 from typing import Optional
 from enum import Enum
 from fastapi import Depends
-from .routes import applications
+from routes import applications
 
 
 #TEMPORARY SETUP FOR TABLES

@@ -7,7 +7,7 @@ Base = declarative_base()
 class Application(Base):
 	_tablename_ = "application"
 
-	id: Column(Integer, primary_key=True, index=True
+	id = Column(Integer, primary_key=True, index=True)
 	reference_number = Column(String, unique=True, index=True)
 	address = Column(String, index=True)
 	description = Column(String)
@@ -16,3 +16,4 @@ class Application(Base):
 	submission_date = Column(Date)
 	decision_date = Column(Date, nullable=True)
 	created_at = Column(Date, default= datetime.utcnow) 
+	
