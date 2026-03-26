@@ -1,4 +1,4 @@
-from sqlalchemy.orm inport Session
+from sqlalchemy.orm import Session
 from models.application import Application
 from typing import Optional
 from datetime import date

@@ -8,8 +8,8 @@ router = APIRouter()
 @router.get("/applications")
 def read_applications(
 	status: str = None,
-	submission_date_from: str = None
-	submission_date_to: str = None
+	submission_date_from: str = None,
+	submission_date_to: str = None,
 	address: str = None, 
 	limit: int = 10,
 	offset: int = 0,

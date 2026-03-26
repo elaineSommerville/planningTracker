@@ -4,7 +4,13 @@ from datetime import date, datetime
 from typing import Optional
 from enum import Enum
 from fastapi import Depends
-from routes import applications
+from .routes import applications
+
+
+#TEMPORARY SETUP FOR TABLES
+from models.application import Base
+from database import engine
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI() #this is what was missing, i didnt define 'app'
 app.include_router(applications.router)
