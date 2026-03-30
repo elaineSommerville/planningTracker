@@ -1,5 +1,8 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from typing import Optional 
+from datetime import date
+
 from app.database import get_db
 from app.services.application_service import get_applications
 
@@ -16,11 +19,11 @@ def read_applications(
 	db: Session = Depends(get_db),
 ):
 	return get_applications(
-		db,
-		status,
-		submission_date_from,
-		submission_date_to,
-		address,
-		limit,
-		offset,
+		db = db,
+		status = status,
+		submission_date_from = submission_date_from,
+		submission_date_to = submission_date_to,
+		address = address,
+		limit = limit,
+		offset = offset,
 	)
