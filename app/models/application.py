@@ -1,11 +1,10 @@
 from sqlalchemy import Column, Integer, String, Date, DateTime
-from sqlalchemy.orm import declarative_base
 from datetime import datetime
+from app.database import Base 
 
-Base = declarative_base()
 
 class Application(Base):
-	_tablename_ = "application"
+	__tablename__ = "applications"
 
 	id = Column(Integer, primary_key=True, index=True)
 	reference_number = Column(String, unique=True, index=True)
