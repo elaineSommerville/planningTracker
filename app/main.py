@@ -5,6 +5,8 @@ from typing import Optional
 from enum import Enum
 from fastapi import Depends
 from app.routes import applications
+#from app.schemas import ApplicationsCreate 
+#from app.schemas import ApplicationOut
 
 
 #TEMPORARY SETUP FOR TABLES
@@ -12,8 +14,9 @@ from app.models.application import Base
 from app.database import engine
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI() #this is what was missing, i didnt define 'app'
-app.include_router(applications.router)
+#set the /docs url so it displays correctly 
+app = FastAPI(docs_url="/docs") #this is what was missing, i didnt define 'app'
+#app.include_router(applications.router)
 
 # initialize an empty applications array
 applications = [] 
