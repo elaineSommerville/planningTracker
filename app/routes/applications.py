@@ -5,8 +5,17 @@ from datetime import date
 
 from app.database import get_db
 from app.services.application_service import get_applications
-
+from app.schemas import ApplicationCreate, ApplicationOut
+from app.models import Application
 router = APIRouter()
+
+@router.post("/applications/", response_model=ApplicationOut)
+def create_application(app: ApplicationCreate, db: Session = Depends(get_db)):
+    db_app = Application(**app.dict())
+    db.add(db_app)
+    db.commit()
+    db.refresh(db_app)
+    return db_app
 
 @router.get("/applications")
 def read_applications(
