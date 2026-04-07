@@ -5,8 +5,10 @@ from typing import Optional
 from enum import Enum
 from fastapi import Depends
 from app.routes import applications
-#from app.schemas import ApplicationsCreate 
+from app.schemas import ApplicationCreate 
 from app.schemas import ApplicationOut
+from app.schemas import ApplicationCreate
+from app.database import get_db
 
 
 #TEMPORARY SETUP FOR TABLES
@@ -94,37 +96,49 @@ def filter_applications(filters: ApplicationFilter):
 
 	return execute_query(query, params)
 
-# # ___start or original CRUD enpoints___
-# # create a POST endpoint
-# # this adds an application of type/model(BaseModel) 'Application' to applications array
-# @app.post("/applications")
-# def create_application(ApplicationCreate):
-# 	applications.append(application)
-# 	return application
+# ___start or original CRUD enpoints___
+# create a POST endpoint
+# this adds an application of type/model(BaseModel) 'Application' to applications array
+@app.post("/applications")
+def create_application(ApplicationCreate):
+	applications.append(application)
+	return application
 
-# # create a GET endpoint
-# # this retrieves all of the applications currently in the applications array
-# @app.get("/applications")
-# def get_applications():
-# 	return applications
+# create a GET endpoint
+# this retrieves all of the applications currently in the applications array
+@app.get("/applications")
+def get_applications():
+	return applications
 
-# # create a GET endpoint
-# # this retrieves one application via its id parameter
-# @app.get("/applications/{app_id}")
-# def get_application(app_id:int):
-# 	for app in applications:
-# 		if app.id == app_id:
-# 			return app
-# 	return {"error": "Application not found"}
+# create a GET endpoint
+# this retrieves one application via its id parameter
+@app.get("/applications/{app_id}")
+def get_application(app_id:int):
+	for app in applications:
+		if app.id == app_id:
+			return app
+	return {"error": "Application not found"}
 
-# # create a PUT endpoint 
-# @app.put("/applications/{app_id}")
-# def update_application(app_id: int, updated_app: Application):
-# 	for index, app in enumerate(applications):
-# 		if app.id == app_id: 
-# 			applications[index] = updated_app
-# 			return updated_app
-# 	return {"error": "Application not found"}
+# create a PUT endpoint 
+# this was breaking /docs previously
+# ensure there is a schema which correlates to this endpoint
+# FIX - created a corresponding schema in schemas.py - called ApplicationUpdate
+@app.put("/applications/{app_id}", response_model=ApplicationOut)
+def update_application(
+	app_id: int, 
+	updated_app: ApplicationUpdate,
+	db: Session = Depends(get_db)
+):
+	db_app = db.query(Application).filter(Application.id == app_id).first()
+	
+	if not db_app: 
+			return {"error": "Application not found"}
+	for key, value in updated_app.dict(exclude_unset=True).items():
+		setattr(db_app, key, value)
+	db.commit()
+	db.refresh(db_app)
+
+	return db_app
 		
 # # create a DELETE endpoint
 # @app.delete("/applications/{app_id}")
