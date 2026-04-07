@@ -10,15 +10,13 @@ from app.models import Application
 router = APIRouter()
 
 @router.post("/applications/", response_model=ApplicationOut)
-def create_application(app: ApplicationCreate, db: Session = Depends(get_db)):
-    db_app = Application(**app.dict())
-    db.add(db_app)
-    db.commit()
-    db.refresh(db_app)
-    return db_app
-
-@router.get("/applications")
-def read_applications(
+def create_application(
+    application: ApplicationCreate, 
+    db: Session = Depends(get_db)
+	):
+    
+	@router.get("/applications")
+	def read_applications(
 	status: str = None,
 	submission_date_from: str = None,
 	submission_date_to: str = None,
@@ -27,7 +25,7 @@ def read_applications(
 	offset: int = 0,
 	db: Session = Depends(get_db),
 ):
-	return get_applications(
+		return get_applications(
 		db = db,
 		status = status,
 		submission_date_from = submission_date_from,

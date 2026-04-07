@@ -6,7 +6,7 @@ from enum import Enum
 from fastapi import Depends
 from app.routes import applications
 #from app.schemas import ApplicationsCreate 
-#from app.schemas import ApplicationOut
+from app.schemas import ApplicationOut
 
 
 #TEMPORARY SETUP FOR TABLES
@@ -94,53 +94,53 @@ def filter_applications(filters: ApplicationFilter):
 
 	return execute_query(query, params)
 
-# ___start or original CRUD enpoints___
-# create a POST endpoint
-# this adds an application of type/model(BaseModel) 'Application' to applications array
-@app.post("/applications")
-def create_application(application: Application):
-	applications.append(application)
-	return application
+# # ___start or original CRUD enpoints___
+# # create a POST endpoint
+# # this adds an application of type/model(BaseModel) 'Application' to applications array
+# @app.post("/applications")
+# def create_application(ApplicationCreate):
+# 	applications.append(application)
+# 	return application
 
-# create a GET endpoint
-# this retrieves all of the applications currently in the applications array
-@app.get("/applications")
-def get_applications():
-	return applications
+# # create a GET endpoint
+# # this retrieves all of the applications currently in the applications array
+# @app.get("/applications")
+# def get_applications():
+# 	return applications
 
-# create a GET endpoint
-# this retrieves one application via its id parameter
-@app.get("/applications/{app_id}")
-def get_application(app_id:int):
-	for app in applications:
-		if app.id == app_id:
-			return app
-	return {"error": "Application not found"}
+# # create a GET endpoint
+# # this retrieves one application via its id parameter
+# @app.get("/applications/{app_id}")
+# def get_application(app_id:int):
+# 	for app in applications:
+# 		if app.id == app_id:
+# 			return app
+# 	return {"error": "Application not found"}
 
-# create a PUT endpoint 
-@app.put("/applications/{app_id}")
-def update_application(app_id: int, updated_app: Application):
-	for index, app in enumerate(applications):
-		if app.id == app_id: 
-			applications[index] = updated_app
-			return updated_app
-	return {"error": "Application not found"}
+# # create a PUT endpoint 
+# @app.put("/applications/{app_id}")
+# def update_application(app_id: int, updated_app: Application):
+# 	for index, app in enumerate(applications):
+# 		if app.id == app_id: 
+# 			applications[index] = updated_app
+# 			return updated_app
+# 	return {"error": "Application not found"}
 		
-# create a DELETE endpoint
-@app.delete("/applications/{app_id}")
-def delete_application(app_id: int):
-	for index, app in enumerate(applications):
-		if app.id == app_id:
-			deleted_app = applications.pop(index)
-			return {"message": "Application deleted", "data": deleted_app}
-	return {"error": "Application not found"}
+# # create a DELETE endpoint
+# @app.delete("/applications/{app_id}")
+# def delete_application(app_id: int):
+# 	for index, app in enumerate(applications):
+# 		if app.id == app_id:
+# 			deleted_app = applications.pop(index)
+# 			return {"message": "Application deleted", "data": deleted_app}
+# 	return {"error": "Application not found"}
 
-# create a GET endpoint
-# get all the applications with a 'status' parameter of 'pending'
-@app.get("/applications/{app_status}")
-def get_application_status(app_status: str):
-	for index, app in enumerate(applications):
-		if app.status == app_status:
-			status_app = applications.pop(index)
-			return {"message": "Pending applications", "data": status_app}
-		return {"error": "Pending applications not found"}  			
+# # create a GET endpoint
+# # get all the applications with a 'status' parameter of 'pending'
+# @app.get("/applications/{app_status}")
+# def get_application_status(app_status: str):
+# 	for index, app in enumerate(applications):
+# 		if app.status == app_status:
+# 			status_app = applications.pop(index)
+# 			return {"message": "Pending applications", "data": status_app}
+# 		return {"error": "Pending applications not found"}  			
