@@ -1,1 +1,1 @@
-from .schemas import ApplicationCreate, ApplicationOut 
+from .schemas import ApplicationCreate, ApplicationOut, ApplicationUpdate 

@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional 
 
+# Schema for the basic application 
 class ApplicationBase(BaseModel):
     referemce_number: str
     address: str
@@ -16,6 +17,7 @@ class ApplicationOut(ApplicationBase):
         from_attributes = True #important (pydantic v2)
 
 
+# Schema for updating the application
 class ApplicationUpdate(BaseModel):
     reference_number: Optional[str] = None
     address: Optional[str] = None
