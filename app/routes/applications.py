@@ -6,7 +6,7 @@ from datetime import date
 from app.database import get_db
 from app.services.application_service import get_applications
 from app.schemas import ApplicationCreate, ApplicationOut
-from app.schemas import ApplicationUpdate 
+from app.schemas.schemas import ApplicationUpdate 
 from app.models import Application
 router = APIRouter()
 

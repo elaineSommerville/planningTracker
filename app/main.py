@@ -5,9 +5,9 @@ from typing import Optional
 from enum import Enum
 from fastapi import Depends
 from app.routes import applications
-from app.schemas import ApplicationCreate 
-from app.schemas import ApplicationOut
-from app.schemas import ApplicationCreate
+from app.schemas.schemas import ApplicationOut
+from app.schemas.schemas import ApplicationCreate
+from app.schemas.schemas import ApplicationUpdate
 from app.database import get_db
 
 
@@ -65,96 +65,3 @@ class ApplicationFilter(BaseModel):
 	sort_by: Optional[str] = "submission_date" #this adds sorting
 	order: Optional[str] = "desc" #this orders the sort
 
-# Get Applications
-# interviewers like to see this pattern
-@app.get("/applications")
-def get_applications(filters: ApplicationFilter = Depends()):
-	return filter_applications(filters)
- 
-# building the filtering logic
-def filter_applications(filters: ApplicationFilter):
-	query = "SELECT * FROM applications WHERE 1=1"
-	params = {}
-
-	if filters.status:
-		query += "AND status = :status"
-		params["submission_date_from"] = filters.submission_date_from
-
-	if filters.submission_date_to:
-		query += "AND submission_date <= :submission_date_to"
-		params["submission_date"] = filters.submission_date_to
-
-	if filters.address:
-		query += "AND address ILIKE :address"
-		params["address"] = f"%{filters.address}%"
-
-	query += " LIMIT :limit OFFSET :offset"
-	params["limit"] = filters.limit
-	params["offset"] = filters.offset
-	
-	query += f" ORDER BY {filters.sort_by} {filters.order}"
-
-	return execute_query(query, params)
-
-# ___start or original CRUD enpoints___
-# create a POST endpoint
-# this adds an application of type/model(BaseModel) 'Application' to applications array
-@app.post("/applications")
-def create_application(ApplicationCreate):
-	applications.append(application)
-	return application
-
-# create a GET endpoint
-# this retrieves all of the applications currently in the applications array
-@app.get("/applications")
-def get_applications():
-	return applications
-
-# create a GET endpoint
-# this retrieves one application via its id parameter
-@app.get("/applications/{app_id}")
-def get_application(app_id:int):
-	for app in applications:
-		if app.id == app_id:
-			return app
-	return {"error": "Application not found"}
-
-# create a PUT endpoint 
-# this was breaking /docs previously
-# ensure there is a schema which correlates to this endpoint
-# FIX - created a corresponding schema in schemas.py - called ApplicationUpdate
-@app.put("/applications/{app_id}", response_model=ApplicationOut)
-def update_application(
-	app_id: int, 
-	updated_app: ApplicationUpdate,
-	db: Session = Depends(get_db)
-):
-	db_app = db.query(Application).filter(Application.id == app_id).first()
-	
-	if not db_app: 
-			return {"error": "Application not found"}
-	for key, value in updated_app.dict(exclude_unset=True).items():
-		setattr(db_app, key, value)
-	db.commit()
-	db.refresh(db_app)
-
-	return db_app
-		
-# # create a DELETE endpoint
-# @app.delete("/applications/{app_id}")
-# def delete_application(app_id: int):
-# 	for index, app in enumerate(applications):
-# 		if app.id == app_id:
-# 			deleted_app = applications.pop(index)
-# 			return {"message": "Application deleted", "data": deleted_app}
-# 	return {"error": "Application not found"}
-
-# # create a GET endpoint
-# # get all the applications with a 'status' parameter of 'pending'
-# @app.get("/applications/{app_status}")
-# def get_application_status(app_status: str):
-# 	for index, app in enumerate(applications):
-# 		if app.status == app_status:
-# 			status_app = applications.pop(index)
-# 			return {"message": "Pending applications", "data": status_app}
-# 		return {"error": "Pending applications not found"}  			

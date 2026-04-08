@@ -7,6 +7,7 @@ class ApplicationBase(BaseModel):
     address: str
     description: str
 
+
 class ApplicationCreate(ApplicationBase):
     pass
 
@@ -24,3 +25,5 @@ class ApplicationUpdate(BaseModel):
     description: Optional[str] = None 
     application_type: Optional[str] = None
     status: Optional[str] = None 
+
+ApplicationUpdate.model_rebuild() 
