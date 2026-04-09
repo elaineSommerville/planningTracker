@@ -44,6 +44,37 @@ def create_application(app: ApplicationCreate, db: Session = Depends(get_db)):
     db.refresh(new_app)
     return new_app
 
+@router.get("/applications")
+def get_applications(db: Session = Depends(get_db)):
+    return db.query(Application).all()
+
+@router.get("/applications/{app_id}")
+def get_application(app_id: int, db: Session = Depends(get_db)):
+    return db.query(Application).filter(Application.id == app_id).first()
+
+@router.put("/applications/{app_id}")
+def update_application(app_id: int, updated_app: ApplicationUpdate, db: Session = Depends(get_db)):
+    app = db.query(Application).filter(Application.id == app_id).first()
+
+    for key, value in updated_app.dict().items():
+        setattr(app, key, value)
+
+    db.commit()
+    db.refresh(app)
+    return app
+
+@router.delete("/applications/{app_id}")
+def delete_application(app_id: int, db: Session = Depends(get_db)):
+    app = db.query(Application).filter(Application.id == app_id).first()
+    db.delete(app)
+    db.commit()
+    return {"message": "Deleted"}
+
+
+
+
+
+
 
 	# ____BROUGHT IN FROM MAIN.PY TO KEEP IT CLEAN & FREE OF ENDPOINTS____
 	# Get Applications

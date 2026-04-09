@@ -1,6 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker 
 from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import Session 
+
+
 
 
 DATABASE_URL = "postgresql://postgres:PostBoxGreen@localhost:5432/planning_db"
