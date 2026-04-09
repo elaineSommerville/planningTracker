@@ -4,7 +4,7 @@ from typing import Optional
 from datetime import date
 
 from app.database import get_db
-from app.services.application_service import get_applications
+#from app.services.application_service import get_applications
 from app.schemas import ApplicationCreate, ApplicationOut
 from app.schemas.schemas import ApplicationUpdate 
 from app.models import Application
@@ -35,6 +35,14 @@ def create_application(
 		limit = limit,
 		offset = offset,
 	)
+
+@router.post("/applications")
+def create_application(app: ApplicationCreate, db: Session = Depends(get_db)):
+    new_app = Application(**app.dict())
+    db.add(new_app)
+    db.commit()
+    db.refresh(new_app)
+    return new_app
 
 
 	# ____BROUGHT IN FROM MAIN.PY TO KEEP IT CLEAN & FREE OF ENDPOINTS____

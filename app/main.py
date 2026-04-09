@@ -18,7 +18,8 @@ Base.metadata.create_all(bind=engine)
 
 #set the /docs url so it displays correctly 
 app = FastAPI(docs_url="/docs") #this is what was missing, i didnt define 'app'
-#app.include_router(applications.router)
+app.include_router(applications.router)
+
 
 # initialize an empty applications array
 applications = [] 
