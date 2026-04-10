@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import Optional 
 from datetime import date
-
+# routes need access to the db 
 from app.database import get_db
 #from app.services.application_service import get_applications
 from app.schemas import ApplicationCreate, ApplicationOut
