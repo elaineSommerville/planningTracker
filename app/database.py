@@ -14,7 +14,7 @@ SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 Base = declarative_base()
 
-#this is what the route needs
+#this is what the route needs, it needs db to be initialised 
 def get_db():
 	db = SessionLocal()
 	try:
